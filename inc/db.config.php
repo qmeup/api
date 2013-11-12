@@ -2,10 +2,10 @@
 function db($variable) {
 	$db = array(
 // Database Config
-			'hostname' => 'localhost', 
-			'username' => 'almasco_admin',
-			'password' => '~Oh3n3Op4re',
-			'dbname' => 'almasco_inque',
+			'hostname' => 'us-cdbr-azure-west-b.cleardb.com', 
+			'username' => 'bbfa6b7033a0a8',
+			'password' => 'bc38bf1f',
+			'dbname' => 'qmeup',
 			'tablename' => 'biz_locations'
 );
 	return $db[$variable];

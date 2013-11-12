@@ -1,9 +1,9 @@
 <?php
 
-$username = "almasco_admin";
-$password = "~Oh3n3Op4re";
-$hostname = "localhost";	
-$database = "almasco_inque";
+$username = "bbfa6b7033a0a8";
+$password = "bc38bf1f";
+$hostname = "us-cdbr-azure-west-b.cleardb.com'";	
+$database = "qmeup";
 
 $con = mysql_connect($hostname, $username, $password) or die(mysql_error());
 mysql_select_db($database) or die(mysql_error());
