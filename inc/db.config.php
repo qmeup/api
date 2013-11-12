@@ -2,7 +2,7 @@
 function db($variable) {
 	$db = array(
 // Database Config
-			'hostname' => 'us-cdbr-azure-west-b.cleardb.com', 
+			'hostname' => 'http://us-cdbr-azure-west-b.cleardb.com', 
 			'username' => 'bbfa6b7033a0a8',
 			'password' => 'bc38bf1f',
 			'dbname' => 'qmeup',
