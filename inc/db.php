@@ -1,11 +1,12 @@
 <?php
+$url=parse_url(getenv("mysql://bbfa6b7033a0a8:bc38bf1f@us-cdbr-azure-west-b.cleardb.com/qmeup?reconnect=true"));
 
-$username = "bbfa6b7033a0a8";
-$password = "bc38bf1f";
-$hostname = "http://us-cdbr-azure-west-b.cleardb.com'";	
-$database = "qmeup";
+$server = $url["host"];
+$username = $url["user"];
+$password = $url["pass"];
+$db = substr($url["path"],1);
 
-$con = @mysql_connect($hostname, $username, $password) or die(mysql_error());
-mysql_select_db($database) or die(mysql_error());
+mysql_connect($server, $username, $password);
+mysql_select_db($db) or die(mysql_error());
 
 ?>
