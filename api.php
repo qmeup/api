@@ -119,7 +119,7 @@ default:
 // Do the proccess for non-indented
 if($query != "")
 {
-  echo $query."<p>";
+  //echo $query."<p>";
   // Make new instance
   $json = new MyJSON;
   $results = $json->SQLtoJSON($query);	
