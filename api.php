@@ -10,35 +10,51 @@ switch ($request)
 case "listbusinesses":
   $lat = $_REQUEST['lat'];
   $long = $_REQUEST['lng'];
-  if(isset($_REQUEST['search']))
+  if(!isset($_REQUEST['distance']))
   {
-	$search = $_REQUEST['search'];
-	$query = "SELECT ((ACOS(SIN(".$lat." * PI() / 180) * SIN(latitude * PI() / 180) + COS(".$lat." * PI() / 180) * COS(latitude * PI() / 180) * COS((".$long." - longitude) * PI() / 180)) * 180 / PI()) * 60 * 1.1515) AS `distance`, latitude, longitude, biz_locations.id, location_code, yelp_id, address, icon, image, description, name, category, queues.length, open_from, open_to FROM `biz_locations` inner join `queues` on biz_locations.id = queues.b_id inner join `businesses` on biz_locations.b_id = businesses.id WHERE status = 1 AND name LIKE '%".$search."%' HAVING `distance`<='50' ORDER BY `distance` ASC";
+    $distance = "25";
   }
   else
   {
-	$query = "SELECT ((ACOS(SIN(".$lat." * PI() / 180) * SIN(latitude * PI() / 180) + COS(".$lat." * PI() / 180) * COS(latitude * PI() / 180) * COS((".$long." - longitude) * PI() / 180)) * 180 / PI()) * 60 * 1.1515) AS `distance`, latitude, longitude, biz_locations.id, location_code, yelp_id, address, icon, image, description, name, category, queues.length, open_from, open_to FROM `biz_locations` inner join `queues` on biz_locations.id = queues.b_id inner join `businesses` on biz_locations.b_id = businesses.id WHERE status = 1 HAVING `distance`<='50' ORDER BY `distance` ASC";
+    $distance = $_REQUEST['distance'];
+  }
+  if(isset($_REQUEST['search']))
+  {
+	$search = $_REQUEST['search'];
+	$query = "SELECT ((ACOS(SIN(".$lat." * PI() / 180) * SIN(latitude * PI() / 180) + COS(".$lat." * PI() / 180) * COS(latitude * PI() / 180) * COS((".$long." - longitude) * PI() / 180)) * 180 / PI()) * 60 * 1.1515) AS `distance`, latitude, longitude, biz_locations.id as location_id, location_code, yelp_id, address, businesses.icon, businesses.image, description, businesses.name, businesses.category, queues.length, open_from, open_to, count( coupons.id ) AS coupon_number FROM `biz_locations` inner join `queues` on biz_locations.id = queues.b_id inner join `businesses` on biz_locations.b_id = businesses.id inner join coupons on coupons.b_id = businesses.id WHERE status = 1 AND name LIKE '%".$search."%' HAVING `distance`<='".$distance."' ORDER BY `distance` ASC";
+  }
+  else
+  {
+	$query = "SELECT ((ACOS(SIN(".$lat." * PI() / 180) * SIN(latitude * PI() / 180) + COS(".$lat." * PI() / 180) * COS(latitude * PI() / 180) * COS((".$long." - longitude) * PI() / 180)) * 180 / PI()) * 60 * 1.1515) AS `distance`, latitude, longitude, biz_locations.id as location_id, location_code, yelp_id, address, businesses.icon, businesses.image, description, businesses.name, businesses.category, queues.length, open_from, open_to, count( coupons.id ) AS coupon_number FROM `biz_locations` inner join `queues` on biz_locations.id = queues.b_id inner join `businesses` on biz_locations.b_id = businesses.id inner join coupons on coupons.b_id = businesses.id WHERE status = 1 HAVING `distance`<='".$distance."' ORDER BY `distance` ASC";
   }
   break;
 case "getbusiness":
   $id = $_REQUEST['id'];
-  $query = "select biz_locations.id AS bid, address, phone, icon, image, description, name, category, queues.id AS qid, queues.length, open_from, open_to from biz_locations inner join queues on biz_locations.id = queues.b_id inner join `businesses` on biz_locations.b_id = businesses.id where status = 1 and businesses.id = ".$id;
+  $query = "select biz_locations.id AS location_id, businesses.id as business_id address, phone, icon, image, description, name, category, queues.id AS qid, queues.length, open_from, open_to from biz_locations inner join queues on biz_locations.id = queues.b_id inner join `businesses` on biz_locations.b_id = businesses.id where status = 1 and biz_locations.id = ".$id;
   break;
 case "listcategories":
   $query = "SELECT category,COUNT(*) as count FROM biz_locations inner join `businesses` on biz_locations.b_id = businesses.id GROUP BY category ORDER BY category ASC";
   break;
 case "getcategory":
   $lat = $_REQUEST['lat'];
-  $lng = $_REQUEST['lng'];
+  $long = $_REQUEST['lng'];
   $category_name = $_REQUEST['name'];
-  if(isset($_REQUEST['search']))
+  if(!isset($_REQUEST['distance']))
   {
-	$search = $_REQUEST['search'];
-	$query = "SELECT ((ACOS(SIN(".$lat." * PI() / 180) * SIN(latitude * PI() / 180) + COS(".$lat." * PI() / 180) * COS(latitude * PI() / 180) * COS((".$lng." - longitude) * PI() / 180)) * 180 / PI()) * 60 * 1.1515) AS `distance`, latitude, longitude, biz_locations.id, location_code, yelp_id, address, icon, image, description, name, category, queues.length, open_from, open_to FROM `biz_locations` inner join `queues` on biz_locations.id = queues.b_id inner join `businesses` on biz_locations.b_id = businesses.id WHERE status = 1 AND category = '".$category_name."' AND name LIKE '%".$search."%' HAVING `distance`<='50' ORDER BY `distance` ASC";
+    $distance = "25";
   }
   else
   {
-	$query = "SELECT ((ACOS(SIN(".$lat." * PI() / 180) * SIN(latitude * PI() / 180) + COS(".$lat." * PI() / 180) * COS(latitude * PI() / 180) * COS((".$lng." - longitude) * PI() / 180)) * 180 / PI()) * 60 * 1.1515) AS `distance`, latitude, longitude, biz_locations.id, location_code, yelp_id, address, icon, image, description, name, category, queues.length, open_from, open_to FROM `biz_locations` inner join `queues` on biz_locations.id = queues.b_id inner join `businesses` on biz_locations.b_id = businesses.id WHERE status = 1 AND category = '".$category_name."' HAVING `distance`<='50' ORDER BY `distance` ASC";
+    $distance = $_REQUEST['distance'];
+  }
+  if(isset($_REQUEST['search']))
+  {
+	$search = $_REQUEST['search'];
+	$query = "SELECT ((ACOS(SIN(".$lat." * PI() / 180) * SIN(latitude * PI() / 180) + COS(".$lat." * PI() / 180) * COS(latitude * PI() / 180) * COS((".$long." - longitude) * PI() / 180)) * 180 / PI()) * 60 * 1.1515) AS `distance`, latitude, longitude, biz_locations.id as location_id, location_code, yelp_id, address, businesses.icon, businesses.image, description, businesses.name, businesses.category, queues.length, open_from, open_to, count( coupons.id ) AS coupon_number FROM `biz_locations` inner join `queues` on biz_locations.id = queues.b_id inner join `businesses` on biz_locations.b_id = businesses.id inner join coupons on coupons.b_id = businesses.id WHERE status = 1 AND category = '".$category_name."' AND name LIKE '%".$search."%' HAVING `distance`<='".$distance."' ORDER BY `distance` ASC";
+  }
+  else
+  {
+	$query = "SELECT ((ACOS(SIN(".$lat." * PI() / 180) * SIN(latitude * PI() / 180) + COS(".$lat." * PI() / 180) * COS(latitude * PI() / 180) * COS((".$long." - longitude) * PI() / 180)) * 180 / PI()) * 60 * 1.1515) AS `distance`, latitude, longitude, biz_locations.id as location_id, location_code, yelp_id, address, businesses.icon, businesses.image, description, businesses.name, businesses.category, queues.length, open_from, open_to, count( coupons.id ) AS coupon_number FROM `biz_locations` inner join `queues` on biz_locations.id = queues.b_id inner join `businesses` on biz_locations.b_id = businesses.id inner join coupons on coupons.b_id = businesses.id WHERE status = 1 AND category = '".$category_name."' HAVING `distance`<='".$distance."' ORDER BY `distance` ASC";
   }
   break;
 case "listcoupons":
@@ -86,33 +102,25 @@ case "getwaittime":
   $location_id = $_REQUEST['id'];
   $query = "select avg(diff) as AverageWaitTimeinMinutes from (select TIMESTAMPDIFF(MINUTE, t1.time_stamp, min(t2.time_stamp)) as diff from wait_times t1 inner join wait_times t2 on t2.time_stamp > t1.time_stamp where t2.b_id = ".$location_id." group by t1.time_stamp) a";
   break;
-case "listmenuitems":
-  $business_id = $_REQUEST['id'];
-  $query = "select * from menu where b_id = ".$business_id;
-  break;
-case "getmenuitem":
-  $item_id = $_REQUEST['id'];
-  $query = "select * from menu where id = ".$item_id;
-  break;
-case "listservices":
-  $business_id = $_REQUEST['id'];
-  $query = "select * from services where b_id = ".$business_id;
-  break;
-case "getservice":
-  $service_id = $_REQUEST['id'];
-  $query = "select * from services where id = ".$service_id;
-  break; 
 default:
   $lat = $_REQUEST['lat'];
-  $lng = $_REQUEST['lng'];
-  if(isset($_REQUEST['search']))
+  $long = $_REQUEST['lng'];
+  if(!isset($_REQUEST['distance']))
   {
-	$search = $_REQUEST['search'];
-	$query = "SELECT ((ACOS(SIN(".$lat." * PI() / 180) * SIN(latitude * PI() / 180) + COS(".$lat." * PI() / 180) * COS(latitude * PI() / 180) * COS((".$long." - longitude) * PI() / 180)) * 180 / PI()) * 60 * 1.1515) AS `distance`, latitude, longitude, biz_locations.id, location_code, yelp_id, address, icon, image, description, name, category, queues.length, open_from, open_to FROM `biz_locations` inner join `queues` on biz_locations.id = queues.b_id inner join `businesses` on biz_locations.b_id = businesses.id WHERE status = 1 AND name LIKE '%".$search."%' HAVING `distance`<='50' ORDER BY `distance` ASC";
+    $distance = "25";
   }
   else
   {
-	$query = "SELECT ((ACOS(SIN(".$lat." * PI() / 180) * SIN(latitude * PI() / 180) + COS(".$lat." * PI() / 180) * COS(latitude * PI() / 180) * COS((".$long." - longitude) * PI() / 180)) * 180 / PI()) * 60 * 1.1515) AS `distance`, latitude, longitude, biz_locations.id, location_code, yelp_id, address, icon, image, description, name, category, queues.length, open_from, open_to FROM `biz_locations` inner join `queues` on biz_locations.id = queues.b_id inner join `businesses` on biz_locations.b_id = businesses.id WHERE status = 1 HAVING `distance`<='50' ORDER BY `distance` ASC";
+    $distance = $_REQUEST['distance'];
+  }
+  if(isset($_REQUEST['search']))
+  {
+	$search = $_REQUEST['search'];
+	$query = "SELECT ((ACOS(SIN(".$lat." * PI() / 180) * SIN(latitude * PI() / 180) + COS(".$lat." * PI() / 180) * COS(latitude * PI() / 180) * COS((".$long." - longitude) * PI() / 180)) * 180 / PI()) * 60 * 1.1515) AS `distance`, latitude, longitude, biz_locations.id as location_id, location_code, yelp_id, address, businesses.icon, businesses.image, description, businesses.name, businesses.category, queues.length, open_from, open_to, count( coupons.id ) AS coupon_number FROM `biz_locations` inner join `queues` on biz_locations.id = queues.b_id inner join `businesses` on biz_locations.b_id = businesses.id inner join coupons on coupons.b_id = businesses.id WHERE status = 1 AND name LIKE '%".$search."%' HAVING `distance`<='".$distance."' ORDER BY `distance` ASC";
+  }
+  else
+  {
+	$query = "SELECT ((ACOS(SIN(".$lat." * PI() / 180) * SIN(latitude * PI() / 180) + COS(".$lat." * PI() / 180) * COS(latitude * PI() / 180) * COS((".$long." - longitude) * PI() / 180)) * 180 / PI()) * 60 * 1.1515) AS `distance`, latitude, longitude, biz_locations.id as location_id, location_code, yelp_id, address, businesses.icon, businesses.image, description, businesses.name, businesses.category, queues.length, open_from, open_to, count( coupons.id ) AS coupon_number FROM `biz_locations` inner join `queues` on biz_locations.id = queues.b_id inner join `businesses` on biz_locations.b_id = businesses.id inner join coupons on coupons.b_id = businesses.id WHERE status = 1 HAVING `distance`<='".$distance."' ORDER BY `distance` ASC";
   }
 }
 
@@ -142,6 +150,12 @@ if($query != "")
 function getQueueLength($bid)
 {
 	$sql = mysql_fetch_assoc(mysql_query("SELECT * FROM queues WHERE b_id =".$bid));
+    $qid = $sql['length'];
+	return $qid;
+}
+function getCouponNumber($bid)
+{
+	$sql = mysql_fetch_assoc(mysql_query("SELECT count(*) FROM coupons WHERE b_id =".$bid));
     $qid = $sql['length'];
 	return $qid;
 }
