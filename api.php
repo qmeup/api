@@ -135,9 +135,10 @@ if($query != "")
   // Check errors
   if(count($json->errors) > 0) 
   {
-	echo 'Something went wrong:<br /><br />';
-	echo '<pre>'.print_r($json->errors, true).'</pre>';
-	die();
+	//echo 'Something went wrong:<br /><br />';
+	//echo '<pre>'.print_r($json->errors, true).'</pre>';
+	//die();
+	echo json_encode(0);
   }
   else
   {
