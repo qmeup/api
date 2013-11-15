@@ -12,7 +12,7 @@ case "listbusinesses":
   $long = $_REQUEST['lng'];
   if(!isset($_REQUEST['distance']))
   {
-    $distance = "25";
+    $distance = "10";
   }
   else
   {
@@ -41,7 +41,7 @@ case "getcategory":
   $category_name = $_REQUEST['name'];
   if(!isset($_REQUEST['distance']))
   {
-    $distance = "25";
+    $distance = "10";
   }
   else
   {
@@ -107,7 +107,7 @@ default:
   $long = $_REQUEST['lng'];
   if(!isset($_REQUEST['distance']))
   {
-    $distance = "25";
+    $distance = "10";
   }
   else
   {
@@ -127,7 +127,6 @@ default:
 // Do the proccess for non-indented
 if($query != "")
 {
-  //echo $query."<p>";
   // Make new instance
   $json = new MyJSON;
   $results = $json->SQLtoJSON($query);	
@@ -135,15 +134,11 @@ if($query != "")
   // Check errors
   if(count($json->errors) > 0) 
   {
-	//echo 'Something went wrong:<br /><br />';
-	//echo '<pre>'.print_r($json->errors, true).'</pre>';
-	//die();
 	echo json_encode(0);
   }
   else
   {
 	echo $results;
-	//echo '<pre>'.print_r(json_decode($results), true).'</pre>';
   }
 }
 
