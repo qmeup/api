@@ -12,7 +12,7 @@ case "listbusinesses":
   $long = $_REQUEST['lng'];
   if(!isset($_REQUEST['distance']))
   {
-    $distance = "10";
+    $distance = "50";
   }
   else
   {
@@ -41,7 +41,7 @@ case "getcategory":
   $category_name = $_REQUEST['name'];
   if(!isset($_REQUEST['distance']))
   {
-    $distance = "10";
+    $distance = "50";
   }
   else
   {
@@ -107,7 +107,7 @@ default:
   $long = $_REQUEST['lng'];
   if(!isset($_REQUEST['distance']))
   {
-    $distance = "10";
+    $distance = "50";
   }
   else
   {
